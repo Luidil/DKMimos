@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DK Mimos - Joias e Presentes Especiais</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 🔹 CSS (Estilos) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f9f3f0;
+            color: #333;
+        }
+
+        header {
+            background-color: #fff;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo h1 {
+            color: #d4af37; /* Dourado */
+            font-size: 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li a {
+            margin: 0 1rem;
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .carrinho {
+            position: relative;
+            cursor: pointer;
+        }
+
+        #contador-carrinho {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #d4af37;
+            color: white;
+            border-radius: 50%;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .banner {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .btn {
+            background: #d4af37;
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 5px;
+            margin-top: 1rem;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .destaques {
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .produtos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .produto {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .produto img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .produto h3 {
+            margin: 0.5rem 0;
+        }
+
+        .produto p {
+            color: #d4af37;
+            font-weight: bold;
+        }
+
+        .produto button {
+            background: #d4af37;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+            cursor: pointer;
+        }
+
+        .carrinho-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .carrinho-conteudo {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .fechar {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background: #333;
+            color: white;
+        }
+
+        /* 🔹 Responsivo (Celular) */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 1rem 0;
+            }
+            nav ul {
+                margin-top: 1rem;
+            }
+            .produtos {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 🔹 HTML (Estrutura) -->
+    <header>
+        <div class="logo">
+            <h1>DK Mimos</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#produtos">Produtos</a></li>
+                <li><a href="#blog">Dicas</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+        </nav>
+        <div class="carrinho" onclick="abrirCarrinho()">
+            <i class="fas fa-shopping-cart"></i>
+            <span id="contador-carrinho">0</span>
+        </div>
+    </header>
+
+    <section class="banner" id="home">
+        <h2>Coleção Exclusiva</h2>
+        <p>Presentes perfeitos para quem você ama</p>
+        <a href="#produtos" class="btn">Comprar Agora</a>
+    </section>
+
+    <section class="destaques" id="produtos">
+        <h2>Nossos Destaques</h2>
+        <div class="produtos" id="destaques-container">
+            <!-- Produtos carregados via JavaScript -->
+        </div>
+    </section>
+
+    <!-- Carrinho de Compras (Pop-up) -->
+    <div class="carrinho-popup" id="carrinho-popup">
+        <div class="carrinho-conteudo">
+            <span class="fechar" onclick="fecharCarrinho()">&times;</span>
+            <h2>Seu Carrinho</h2>
+            <div id="itens-carrinho"></div>
+            <p id="total-carrinho">Total: R$ 0,00</p>
+            <button class="btn" onclick="finalizarCompra()">Finalizar Compra</button>
+        </div>
+    </div>
+
+    <footer id="contato">
+        <p>&copy; 2025 DK Mimos. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- 🔹 JavaScript (Funcionalidades) -->
+    <script>
+        // Dados dos produtos
+        const produtos = [
+            { id: 1, nome: "Colar de Pérolas", preco: 89.90, imagem: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+            { id: 2, nome: "Brinco de Prata", preco: 45.50, imagem: "https://images.unsplash.com/photo-1602173574767-37ac01994b2a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+            { id: 3, nome: "Anel de Diamante", preco: 120.00, imagem: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" }
+        ];
+
+        let carrinho = [];
+
+        // Carrega produtos na página
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('destaques-container');
+            
+            produtos.forEach(produto => {
+                container.innerHTML += `
+                    <div class="produto">
+                        <img src="${produto.imagem}" alt="${produto.nome}">
+                        <h3>${produto.nome}</h3>
+                        <p>R$ ${produto.preco.toFixed(2)}</p>
+                        <button onclick="adicionarAoCarrinho(${produto.id})">Comprar</button>
+                    </div>
+                `;
+            });
+        });
+
+        // Adiciona produto ao carrinho
+        function adicionarAoCarrinho(id) {
+            const produto = produtos.find(p => p.id === id);
+            carrinho.push(produto);
+            atualizarCarrinho();
+            alert(`${produto.nome} foi adicionado ao carrinho!`);
+        }
+
+        // Atualiza o carrinho
+        function atualizarCarrinho() {
+            const contador = document.getElementById('contador-carrinho');
+            const itensCarrinho = document.getElementById('itens-carrinho');
+            const totalCarrinho = document.getElementById('total-carrinho');
+
+            contador.textContent = carrinho.length;
+            
+            itensCarrinho.innerHTML = '';
+            let total = 0;
+
+            carrinho.forEach(item => {
+                itensCarrinho.innerHTML += `
+                    <div style="margin-bottom: 10px; border-bottom: 1px solid #eee; padding: 5px;">
+                        <p>${item.nome} - R$ ${item.preco.toFixed(2)}</p>
+                    </div>
+                `;
+                total += item.preco;
+            });
+
+            totalCarrinho.textContent = `Total: R$ ${total.toFixed(2)}`;
+        }
+
+        // Abre/fecha o carrinho
+        function abrirCarrinho() {
+            document.getElementById('carrinho-popup').style.display = 'flex';
+        }
+
+        function fecharCarrinho() {
+            document.getElementById('carrinho-popup').style.display = 'none';
+        }
+
+        // Finaliza compra
+        function finalizarCompra() {
+            if (carrinho.length === 0) {
+                alert("Seu carrinho está vazio!");
+            } else {
+                alert(`Compra finalizada! Total: R$ ${carrinho.reduce((sum, item) => sum + item.preco, 0).toFixed(2)}`);
+                carrinho = [];
+                atualizarCarrinho();
+                fecharCarrinho();
+            }
+        }
+    </script>
+</body>
+</html>
